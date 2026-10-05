@@ -1,0 +1,82 @@
+@page
+@using SaboresDelValle.Web.Presentacion
+@model SaboresDelValle.Web.Pages.Pedidos.EditarModel
+@{
+    ViewData["Title"] = "Editar pedido";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a pedidos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Editar pedido</h1>
+        <p class="sv-page-subtitle">Actualice el pedido y registre su avance hasta el pago.</p>
+    </div>
+</header>
+
+@if (Model.NoEncontrado)
+{
+    <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Volver a pedidos</a>
+}
+else
+{
+    <form method="post" novalidate class="sv-card sv-card--formulario">
+        <div class="sv-card-body">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <dl class="sv-datos sv-datos--compacto">
+                <dt>Pedido</dt>
+                <dd>N.º @Model.PedidoRegistrado!.Id</dd>
+
+                <dt>Fecha y hora</dt>
+                <dd>@EtiquetasPedido.FechaHora(Model.PedidoRegistrado.FechaHora)</dd>
+
+                <dt>Precio unitario registrado</dt>
+                <dd>@EtiquetasPedido.Monto(Model.PedidoRegistrado.PrecioUnitario)</dd>
+            </dl>
+
+            <fieldset class="sv-grupo">
+                <legend class="sv-grupo-titulo">Selección del plato</legend>
+                <div class="mb-3">
+                    <label asp-for="Pedido.IdPlato" class="form-label"></label>
+                    <select asp-for="Pedido.IdPlato" asp-items="Model.OpcionesPlato" class="form-select"
+                            aria-describedby="ayuda-plato">
+                        <option value="">Seleccione...</option>
+                    </select>
+                    <div id="ayuda-plato" class="form-text">Si conserva el plato, se mantiene el precio registrado. Si lo cambia, se aplica el precio actual del nuevo plato.</div>
+                    <span asp-validation-for="Pedido.IdPlato"></span>
+                </div>
+            </fieldset>
+
+            <partial name="_CamposPedido" for="Pedido" />
+
+            <fieldset class="sv-grupo">
+                <legend class="sv-grupo-titulo">Estado y pago</legend>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Pedido.Estado" class="form-label"></label>
+                        <select asp-for="Pedido.Estado" asp-items="EtiquetasPedido.OpcionesEstado()" class="form-select">
+                            <option value="">Seleccione...</option>
+                        </select>
+                        <span asp-validation-for="Pedido.Estado"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Pedido.MetodoPago" class="form-label"></label>
+                        <select asp-for="Pedido.MetodoPago" asp-items="EtiquetasPedido.OpcionesMetodoPago()" class="form-select"
+                                aria-describedby="ayuda-metodo-pago">
+                            <option value="">Sin método de pago</option>
+                        </select>
+                        <div id="ayuda-metodo-pago" class="form-text">Obligatorio solo cuando el estado es Pagado.</div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="sv-card-footer">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+}

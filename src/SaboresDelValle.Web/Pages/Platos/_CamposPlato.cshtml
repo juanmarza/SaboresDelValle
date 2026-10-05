@@ -1,0 +1,33 @@
+@using SaboresDelValle.Domain.Models
+@using SaboresDelValle.Web.Presentacion
+@model PlatoFormulario
+
+<fieldset class="sv-grupo">
+    <legend class="sv-grupo-titulo">Datos del plato</legend>
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" maxlength="@Plato.NombreLongitudMaxima" autocomplete="off"
+               aria-describedby="ayuda-nombre-plato" />
+        <div id="ayuda-nombre-plato" class="form-text">Máximo @Plato.NombreLongitudMaxima caracteres. No puede repetirse.</div>
+        <span asp-validation-for="Nombre"></span>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Precio" class="form-label"></label>
+            <input asp-for="Precio" asp-format="{0:0.00}" type="text" inputmode="decimal" class="form-control"
+                   aria-describedby="ayuda-precio-plato" />
+            <div id="ayuda-precio-plato" class="form-text">Use coma para los decimales, sin separador de miles. Ejemplo: 35,50.</div>
+            <span asp-validation-for="Precio"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Tipo" class="form-label"></label>
+            <select asp-for="Tipo" asp-items="EtiquetasPlato.OpcionesTipo()" class="form-select">
+                <option value="">Seleccione...</option>
+            </select>
+            <span asp-validation-for="Tipo"></span>
+        </div>
+    </div>
+</fieldset>

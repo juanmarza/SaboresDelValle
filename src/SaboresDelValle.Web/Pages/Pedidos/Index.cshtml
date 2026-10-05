@@ -1,0 +1,83 @@
+@page
+@using SaboresDelValle.Web.Presentacion
+@model SaboresDelValle.Web.Pages.Pedidos.IndexModel
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Pedidos</h1>
+        <p class="sv-page-subtitle">Registra y da seguimiento a los pedidos de cada mesa.</p>
+    </div>
+    <a asp-page="Crear" class="btn btn-primary"><partial name="_Icono" model='"mas"' /> Nuevo pedido</a>
+</header>
+
+@if (Model.MensajeExito is not null)
+{
+    <div class="alert alert-success" role="status">@Model.MensajeExito</div>
+}
+
+<div class="sv-card">
+    @if (Model.Pedidos.Count == 0)
+    {
+        <div class="sv-vacio">
+            <span class="sv-vacio-icono"><partial name="_Icono" model='"pedidos"' /></span>
+            <h2 class="sv-vacio-titulo">No hay pedidos registrados.</h2>
+            <p class="sv-vacio-texto">Registre el primer pedido de una mesa.</p>
+            <a asp-page="Crear" class="btn btn-primary">Nuevo pedido</a>
+        </div>
+    }
+    else
+    {
+        <div class="sv-tabla-contenedor">
+            <table class="sv-tabla">
+                <caption class="visually-hidden">Listado de pedidos, del más reciente al más antiguo</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Fecha y hora</th>
+                        <th scope="col" class="sv-num">Mesa</th>
+                        <th scope="col">Plato</th>
+                        <th scope="col" class="sv-num">Cantidad</th>
+                        <th scope="col" class="sv-num">Precio unitario</th>
+                        <th scope="col" class="sv-num">Propina</th>
+                        <th scope="col" class="sv-num">Descuento</th>
+                        <th scope="col">Estado y pago</th>
+                        <th scope="col" class="sv-acciones"><span class="visually-hidden">Acciones</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pedido in Model.Pedidos)
+                    {
+                        <tr>
+                            <td class="sv-id">@pedido.Id</td>
+                            <td class="text-nowrap">@EtiquetasPedido.FechaHora(pedido.FechaHora)</td>
+                            <td class="sv-num">@pedido.NumeroMesa</td>
+                            <td class="sv-principal text-nowrap">@Model.NombresPlato.GetValueOrDefault(pedido.IdPlato, $"Plato {pedido.IdPlato}")</td>
+                            <td class="sv-num">@pedido.Cantidad</td>
+                            <td class="sv-num">@EtiquetasPedido.Monto(pedido.PrecioUnitario)</td>
+                            <td class="sv-num">@EtiquetasPedido.Monto(pedido.Propina)</td>
+                            <td class="sv-num">@EtiquetasPedido.Monto(pedido.Descuento)</td>
+                            <td class="text-nowrap">
+                                <span class="sv-badge @EtiquetasPedido.ClaseEstado(pedido.Estado)">@EtiquetasPedido.Estado(pedido.Estado)</span>
+                                @if (pedido.MetodoPago is not null)
+                                {
+                                    <span class="sv-detalle">· @EtiquetasPedido.MetodoPago(pedido.MetodoPago)</span>
+                                }
+                            </td>
+                            <td class="sv-acciones">
+                                <div class="sv-acciones-grupo">
+                                    <a asp-page="Editar" asp-route-id="@pedido.Id" class="btn btn-sm btn-outline-primary"
+                                       aria-label="Editar pedido @pedido.Id">Editar</a>
+                                    <a asp-page="Eliminar" asp-route-id="@pedido.Id" class="btn btn-sm btn-outline-danger"
+                                       aria-label="Eliminar pedido @pedido.Id">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

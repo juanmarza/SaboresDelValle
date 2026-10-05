@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MySqlConnector;
+using SaboresDelValle.Application.Interfaces;
+using SaboresDelValle.Infrastructure.Repositories;
 
 namespace SaboresDelValle.Infrastructure;
 
@@ -20,6 +22,10 @@ public static class DependencyInjection
         }
 
         services.AddSingleton(new MySqlDataSource(connectionString));
+
+        services.AddScoped<IProductoRepository, ProductoRepository>();
+        services.AddScoped<IPlatoRepository, PlatoRepository>();
+        services.AddScoped<IPedidoRepository, PedidoRepository>();
 
         return services;
     }

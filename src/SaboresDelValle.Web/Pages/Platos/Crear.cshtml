@@ -1,0 +1,25 @@
+@page
+@model SaboresDelValle.Web.Pages.Platos.CrearModel
+@{
+    ViewData["Title"] = "Nuevo plato";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a platos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Nuevo plato</h1>
+        <p class="sv-page-subtitle">Agregue un plato al menú. Se registra como disponible.</p>
+    </div>
+</header>
+
+<form method="post" novalidate class="sv-card sv-card--formulario">
+    <div class="sv-card-body">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <partial name="_CamposPlato" for="Plato" />
+    </div>
+    <div class="sv-card-footer">
+        <button type="submit" class="btn btn-primary">Guardar plato</button>
+        <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</form>

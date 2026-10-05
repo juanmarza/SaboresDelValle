@@ -1,0 +1,49 @@
+@page
+@model SaboresDelValle.Web.Pages.Platos.EditarModel
+@{
+    ViewData["Title"] = "Editar plato";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a platos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Editar plato</h1>
+        <p class="sv-page-subtitle">Actualice los datos del plato y su disponibilidad en el menú.</p>
+    </div>
+</header>
+
+@if (Model.NoEncontrado)
+{
+    <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Volver a platos</a>
+}
+else
+{
+    <form method="post" novalidate class="sv-card sv-card--formulario">
+        <div class="sv-card-body">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <partial name="_CamposPlato" for="Plato" />
+
+            <fieldset class="sv-grupo">
+                <legend class="sv-grupo-titulo">Disponibilidad</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="Disponible" class="form-label">Estado del plato</label>
+                        <select asp-for="Disponible" class="form-select" aria-describedby="ayuda-disponible">
+                            <option value="true">Disponible</option>
+                            <option value="false">No disponible</option>
+                        </select>
+                        <div id="ayuda-disponible" class="form-text">Un plato no disponible no puede elegirse en pedidos nuevos.</div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="sv-card-footer">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+}

@@ -1,0 +1,39 @@
+@page
+@model SaboresDelValle.Web.Pages.Pedidos.CrearModel
+@{
+    ViewData["Title"] = "Nuevo pedido";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a pedidos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Nuevo pedido</h1>
+        <p class="sv-page-subtitle">Registre el plato solicitado por una mesa. El pedido inicia como pendiente.</p>
+    </div>
+</header>
+
+<form method="post" novalidate class="sv-card sv-card--formulario">
+    <div class="sv-card-body">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+        <fieldset class="sv-grupo">
+            <legend class="sv-grupo-titulo">Selección del plato</legend>
+            <div class="mb-3">
+                <label asp-for="Pedido.IdPlato" class="form-label"></label>
+                <select asp-for="Pedido.IdPlato" asp-items="Model.OpcionesPlato" class="form-select"
+                        aria-describedby="ayuda-plato">
+                    <option value="">Seleccione...</option>
+                </select>
+                <div id="ayuda-plato" class="form-text">Solo se muestran los platos disponibles. El precio unitario se toma del precio actual del plato.</div>
+                <span asp-validation-for="Pedido.IdPlato"></span>
+            </div>
+        </fieldset>
+
+        <partial name="_CamposPedido" for="Pedido" />
+    </div>
+    <div class="sv-card-footer">
+        <button type="submit" class="btn btn-primary">Registrar pedido</button>
+        <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+</form>

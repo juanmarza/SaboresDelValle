@@ -1,51 +1,72 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es-BO">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SaboresDelValle</title>
+    <meta name="theme-color" content="#2E7D32" />
+    <title>@ViewData["Title"] · Sabores del Valle</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SaboresDelValle.Web.styles.css" asp-append-version="true" />
 </head>
+@{
+    var paginaActual = ViewContext.RouteData.Values["page"]?.ToString() ?? string.Empty;
+    var secciones = new[]
+    {
+        (Texto: "Inicio", Pagina: "/Index", Activa: paginaActual == "/Index"),
+        (Texto: "Productos", Pagina: "/Productos/Index", Activa: paginaActual.StartsWith("/Productos/")),
+        (Texto: "Platos", Pagina: "/Platos/Index", Activa: paginaActual.StartsWith("/Platos/")),
+        (Texto: "Pedidos", Pagina: "/Pedidos/Index", Activa: paginaActual.StartsWith("/Pedidos/"))
+    };
+}
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <a class="sv-saltar-contenido" href="#contenido">Saltar al contenido</a>
+
+    <header class="sv-header">
+        <nav class="navbar navbar-expand-md navbar-light" aria-label="Navegación principal">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">SaboresDelValle</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="sv-marca" asp-page="/Index" aria-label="Sabores del Valle, ir al inicio">
+                    <span class="sv-marca-icono"><partial name="_Icono" model='"hoja"' /></span>
+                    <span class="sv-marca-texto">
+                        <span class="sv-marca-nombre">SABORES DEL VALLE</span>
+                        <span class="sv-marca-subtitulo">Gestión de Restaurante</span>
+                    </span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navegacion"
+                        aria-controls="navegacion" aria-expanded="false" aria-label="Mostrar u ocultar el menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+
+                <div class="collapse navbar-collapse" id="navegacion">
+                    <ul class="navbar-nav sv-nav ms-auto">
+                        @foreach (var seccion in secciones)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(seccion.Activa ? "active" : null)"
+                                   aria-current="@(seccion.Activa ? "page" : null)"
+                                   asp-page="@seccion.Pagina">@seccion.Texto</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <main id="contenido" class="sv-main" tabindex="-1">
         <div class="container">
-            &copy; 2026 - SaboresDelValle - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="sv-footer">
+        <div class="container d-flex flex-wrap justify-content-between gap-2">
+            <span><strong>Sabores del Valle</strong> · Gestión de Restaurante</span>
+            <span>&copy; @DateTime.Now.Year Sabores del Valle</span>
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

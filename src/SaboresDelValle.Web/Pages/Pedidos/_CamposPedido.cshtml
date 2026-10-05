@@ -1,0 +1,40 @@
+@model PedidoFormulario
+
+<fieldset class="sv-grupo">
+    <legend class="sv-grupo-titulo">Mesa y cantidad</legend>
+
+    <div class="row g-3">
+        <div class="col-6">
+            <label asp-for="NumeroMesa" class="form-label"></label>
+            <input asp-for="NumeroMesa" type="text" inputmode="numeric" class="form-control" />
+            <span asp-validation-for="NumeroMesa"></span>
+        </div>
+
+        <div class="col-6">
+            <label asp-for="Cantidad" class="form-label"></label>
+            <input asp-for="Cantidad" type="text" inputmode="numeric" class="form-control" />
+            <span asp-validation-for="Cantidad"></span>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="sv-grupo">
+    <legend class="sv-grupo-titulo">Propina y descuento</legend>
+
+    <div class="row g-3">
+        <div class="col-6">
+            <label asp-for="Propina" class="form-label"></label>
+            <input asp-for="Propina" asp-format="{0:0.00}" type="text" inputmode="decimal" class="form-control"
+                   aria-describedby="ayuda-importes" />
+            <span asp-validation-for="Propina"></span>
+        </div>
+
+        <div class="col-6">
+            <label asp-for="Descuento" class="form-label"></label>
+            <input asp-for="Descuento" asp-format="{0:0.00}" type="text" inputmode="decimal" class="form-control"
+                   aria-describedby="ayuda-importes" />
+            <span asp-validation-for="Descuento"></span>
+        </div>
+    </div>
+    <div id="ayuda-importes" class="form-text mb-3">Use coma para los decimales, sin separador de miles. Ejemplo: 5,50. Use 0,00 si no corresponde.</div>
+</fieldset>

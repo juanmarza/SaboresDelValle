@@ -1,10 +1,42 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Inicio";
+    var modulos = new[]
+    {
+        (Icono: "productos", Titulo: "Productos", Descripcion: "Administra los insumos y materias primas.",
+         Pagina: "/Productos/Index", Accion: "Ir a productos"),
+        (Icono: "platos", Titulo: "Platos", Descripcion: "Gestiona el menú y los platos disponibles.",
+         Pagina: "/Platos/Index", Accion: "Ir a platos"),
+        (Icono: "pedidos", Titulo: "Pedidos", Descripcion: "Registra y administra los pedidos por mesa.",
+         Pagina: "/Pedidos/Index", Accion: "Ir a pedidos")
+    };
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="sv-hero" aria-labelledby="titulo-inicio">
+    <p class="sv-hero-eyebrow">Gestión de Restaurante</p>
+    <h1 id="titulo-inicio" class="sv-hero-titulo">SABORES DEL VALLE</h1>
+    <p class="sv-hero-texto">Gestión sencilla y organizada de productos, platos y pedidos.</p>
+</section>
+
+<section aria-labelledby="titulo-modulos">
+    <h2 id="titulo-modulos" class="sv-seccion-titulo">Módulos</h2>
+
+    <div class="row g-4">
+        @foreach (var modulo in modulos)
+        {
+            <div class="col-12 col-md-4">
+                <article class="sv-card sv-modulo">
+                    <span class="sv-modulo-icono"><partial name="_Icono" model="modulo.Icono" /></span>
+                    <h3 class="sv-modulo-titulo">@modulo.Titulo</h3>
+                    <p class="sv-modulo-texto">@modulo.Descripcion</p>
+                    <div>
+                        <a asp-page="@modulo.Pagina" class="btn btn-outline-primary">
+                            @modulo.Accion <partial name="_Icono" model='"flecha"' />
+                        </a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+</section>

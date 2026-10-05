@@ -1,0 +1,67 @@
+@page
+@using SaboresDelValle.Web.Presentacion
+@model SaboresDelValle.Web.Pages.Pedidos.EliminarModel
+@{
+    ViewData["Title"] = "Eliminar pedido";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a pedidos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Eliminar pedido</h1>
+        <p class="sv-page-subtitle">Revise los datos antes de confirmar.</p>
+    </div>
+</header>
+
+@if (Model.Pedido is null)
+{
+    <div class="alert alert-warning" role="alert">@Model.MensajeError</div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Volver a pedidos</a>
+}
+else
+{
+    <form method="post" class="sv-card sv-card--formulario sv-card--peligro">
+        <div class="sv-card-body">
+            <p class="sv-pregunta">¿Está seguro de eliminar este pedido?</p>
+            <p class="form-text mb-4">Esta acción no se puede deshacer.</p>
+
+            <dl class="sv-datos">
+                <dt>Id</dt>
+                <dd>@Model.Pedido.Id</dd>
+
+                <dt>Fecha y hora</dt>
+                <dd>@EtiquetasPedido.FechaHora(Model.Pedido.FechaHora)</dd>
+
+                <dt>Mesa</dt>
+                <dd>@Model.Pedido.NumeroMesa</dd>
+
+                <dt>Plato</dt>
+                <dd>@(Model.NombrePlato ?? $"Plato {Model.Pedido.IdPlato}")</dd>
+
+                <dt>Cantidad</dt>
+                <dd>@Model.Pedido.Cantidad</dd>
+
+                <dt>Precio unitario</dt>
+                <dd>@EtiquetasPedido.Monto(Model.Pedido.PrecioUnitario)</dd>
+
+                <dt>Propina</dt>
+                <dd>@EtiquetasPedido.Monto(Model.Pedido.Propina)</dd>
+
+                <dt>Descuento</dt>
+                <dd>@EtiquetasPedido.Monto(Model.Pedido.Descuento)</dd>
+
+                <dt>Estado</dt>
+                <dd><span class="sv-badge @EtiquetasPedido.ClaseEstado(Model.Pedido.Estado)">@EtiquetasPedido.Estado(Model.Pedido.Estado)</span></dd>
+
+                <dt>Método de pago</dt>
+                <dd>@EtiquetasPedido.MetodoPago(Model.Pedido.MetodoPago)</dd>
+            </dl>
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="sv-card-footer">
+            <button type="submit" class="btn btn-danger">Eliminar pedido</button>
+            <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+}

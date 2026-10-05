@@ -1,0 +1,69 @@
+@page
+@using SaboresDelValle.Web.Presentacion
+@model SaboresDelValle.Web.Pages.Platos.IndexModel
+@{
+    ViewData["Title"] = "Platos";
+}
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Platos</h1>
+        <p class="sv-page-subtitle">Gestiona el menú del restaurante y la disponibilidad de cada plato.</p>
+    </div>
+    <a asp-page="Crear" class="btn btn-primary"><partial name="_Icono" model='"mas"' /> Nuevo plato</a>
+</header>
+
+@if (Model.MensajeExito is not null)
+{
+    <div class="alert alert-success" role="status">@Model.MensajeExito</div>
+}
+
+<div class="sv-card">
+    @if (Model.Platos.Count == 0)
+    {
+        <div class="sv-vacio">
+            <span class="sv-vacio-icono"><partial name="_Icono" model='"platos"' /></span>
+            <h2 class="sv-vacio-titulo">No hay platos registrados.</h2>
+            <p class="sv-vacio-texto">Agregue el primer plato del menú.</p>
+            <a asp-page="Crear" class="btn btn-primary">Nuevo plato</a>
+        </div>
+    }
+    else
+    {
+        <div class="sv-tabla-contenedor">
+            <table class="sv-tabla">
+                <caption class="visually-hidden">Listado de platos</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col" class="sv-num">Precio</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col" class="sv-acciones"><span class="visually-hidden">Acciones</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var plato in Model.Platos)
+                    {
+                        <tr>
+                            <td class="sv-id">@plato.Id</td>
+                            <td class="sv-principal">@plato.Nombre</td>
+                            <td>@EtiquetasPlato.Tipo(plato.Tipo)</td>
+                            <td class="sv-num">@EtiquetasPlato.Precio(plato.Precio)</td>
+                            <td><span class="sv-badge @EtiquetasPlato.ClaseEstado(plato.Disponible)">@EtiquetasPlato.Estado(plato.Disponible)</span></td>
+                            <td class="sv-acciones">
+                                <div class="sv-acciones-grupo">
+                                    <a asp-page="Editar" asp-route-id="@plato.Id" class="btn btn-sm btn-outline-primary"
+                                       aria-label="Editar @plato.Nombre">Editar</a>
+                                    <a asp-page="Eliminar" asp-route-id="@plato.Id" class="btn btn-sm btn-outline-danger"
+                                       aria-label="Eliminar @plato.Nombre">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

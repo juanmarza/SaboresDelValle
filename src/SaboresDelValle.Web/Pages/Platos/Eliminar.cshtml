@@ -1,0 +1,57 @@
+@page
+@using SaboresDelValle.Web.Presentacion
+@model SaboresDelValle.Web.Pages.Platos.EliminarModel
+@{
+    ViewData["Title"] = "Eliminar plato";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a platos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Eliminar plato</h1>
+        <p class="sv-page-subtitle">Revise los datos antes de confirmar.</p>
+    </div>
+</header>
+
+@if (Model.Plato is null)
+{
+    <div class="alert alert-warning" role="alert">@Model.MensajeError</div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Volver a platos</a>
+}
+else
+{
+    @if (Model.MensajeError is not null)
+    {
+        <div class="alert alert-danger" role="alert">@Model.MensajeError</div>
+    }
+
+    <form method="post" class="sv-card sv-card--formulario sv-card--peligro">
+        <div class="sv-card-body">
+            <p class="sv-pregunta">¿Está seguro de eliminar este plato?</p>
+            <p class="form-text mb-4">Esta acción no se puede deshacer.</p>
+
+            <dl class="sv-datos">
+                <dt>Id</dt>
+                <dd>@Model.Plato.Id</dd>
+
+                <dt>Nombre</dt>
+                <dd>@Model.Plato.Nombre</dd>
+
+                <dt>Precio</dt>
+                <dd>@EtiquetasPlato.Precio(Model.Plato.Precio)</dd>
+
+                <dt>Tipo</dt>
+                <dd>@EtiquetasPlato.Tipo(Model.Plato.Tipo)</dd>
+
+                <dt>Estado</dt>
+                <dd><span class="sv-badge @EtiquetasPlato.ClaseEstado(Model.Plato.Disponible)">@EtiquetasPlato.Estado(Model.Plato.Disponible)</span></dd>
+            </dl>
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="sv-card-footer">
+            <button type="submit" class="btn btn-danger">Eliminar plato</button>
+            <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+}

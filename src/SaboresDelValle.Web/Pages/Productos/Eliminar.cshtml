@@ -1,0 +1,60 @@
+@page
+@using SaboresDelValle.Web.Presentacion
+@model SaboresDelValle.Web.Pages.Productos.EliminarModel
+@{
+    ViewData["Title"] = "Eliminar producto";
+}
+
+<a asp-page="Index" class="sv-volver"><partial name="_Icono" model='"volver"' /> Volver a productos</a>
+
+<header class="sv-page-header">
+    <div>
+        <h1 class="sv-page-title">Eliminar producto</h1>
+        <p class="sv-page-subtitle">Revise los datos antes de confirmar.</p>
+    </div>
+</header>
+
+@if (Model.Producto is null)
+{
+    <div class="alert alert-warning" role="alert">@Model.MensajeError</div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Volver a productos</a>
+}
+else
+{
+    @if (Model.MensajeError is not null)
+    {
+        <div class="alert alert-danger" role="alert">@Model.MensajeError</div>
+    }
+
+    <form method="post" class="sv-card sv-card--formulario sv-card--peligro">
+        <div class="sv-card-body">
+            <p class="sv-pregunta">¿Está seguro de eliminar este producto?</p>
+            <p class="form-text mb-4">Esta acción no se puede deshacer.</p>
+
+            <dl class="sv-datos">
+                <dt>Id</dt>
+                <dd>@Model.Producto.Id</dd>
+
+                <dt>Nombre</dt>
+                <dd>@Model.Producto.Nombre</dd>
+
+                <dt>Tipo</dt>
+                <dd>@EtiquetasProducto.Tipo(Model.Producto.Tipo)</dd>
+
+                <dt>Unidad de medida</dt>
+                <dd>@EtiquetasProducto.Unidad(Model.Producto.Unidad)</dd>
+
+                <dt>Stock mínimo</dt>
+                <dd>@EtiquetasProducto.StockMinimo(Model.Producto.StockMinimo)</dd>
+
+                <dt>Estado</dt>
+                <dd><span class="sv-badge @EtiquetasProducto.ClaseEstado(Model.Producto.Activo)">@EtiquetasProducto.Estado(Model.Producto.Activo)</span></dd>
+            </dl>
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="sv-card-footer">
+            <button type="submit" class="btn btn-danger">Eliminar producto</button>
+            <a asp-page="Index" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+}

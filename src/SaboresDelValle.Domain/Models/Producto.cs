@@ -1,4 +1,5 @@
 using System.Text;
+using SaboresDelValle.Domain.Common;
 using SaboresDelValle.Domain.Enums;
 using SaboresDelValle.Domain.Exceptions;
 
@@ -7,7 +8,6 @@ namespace SaboresDelValle.Domain.Models;
 public class Producto
 {
     public const int NombreLongitudMaxima = 100;
-    public const int StockMinimoDecimalesMaximos = 3;
 
     private const string LetrasEspecialesPermitidas = "ÑÁÉÍÓÚÜ";
     private const string SimbolosPermitidos = " .-/";
@@ -23,12 +23,11 @@ public class Producto
     {
         ValidarTipo(tipo);
         ValidarUnidad(unidad);
-        ValidarStockMinimo(stockMinimo, unidad);
 
         Nombre = ValidarNombre(nombre);
         Tipo = tipo;
         Unidad = unidad;
-        StockMinimo = stockMinimo;
+        StockMinimo = ValidarStockMinimo(stockMinimo, unidad);
         Activo = true;
     }
 
@@ -65,8 +64,7 @@ public class Producto
 
     public void CambiarStockMinimo(decimal stockMinimo)
     {
-        ValidarStockMinimo(stockMinimo, Unidad);
-        StockMinimo = stockMinimo;
+        StockMinimo = ValidarStockMinimo(stockMinimo, Unidad);
     }
 
     public void Activar()
@@ -148,23 +146,21 @@ public class Producto
         }
     }
 
-    private static void ValidarStockMinimo(decimal stockMinimo, UnidadMedida unidad)
+    private static decimal ValidarStockMinimo(decimal stockMinimo, UnidadMedida unidad)
     {
         if (stockMinimo < 0)
         {
             throw new DomainException("El stock mínimo no puede ser negativo.");
         }
 
-        if (unidad == UnidadMedida.Unidad && decimal.Truncate(stockMinimo) != stockMinimo)
+        var redondeado = PrecisionPolicy.Redondear(stockMinimo);
+
+        if (unidad == UnidadMedida.Unidad && decimal.Truncate(redondeado) != redondeado)
         {
             throw new DomainException(
                 "El stock mínimo debe ser un número entero cuando la unidad de medida es Unidad.");
         }
 
-        if (decimal.Round(stockMinimo, StockMinimoDecimalesMaximos) != stockMinimo)
-        {
-            throw new DomainException(
-                $"El stock mínimo admite como máximo {StockMinimoDecimalesMaximos} decimales.");
-        }
+        return redondeado;
     }
 }

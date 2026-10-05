@@ -1,0 +1,47 @@
+@using SaboresDelValle.Domain.Models
+@using SaboresDelValle.Web.Presentacion
+@model ProductoFormulario
+
+<fieldset class="sv-grupo">
+    <legend class="sv-grupo-titulo">Datos del producto</legend>
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" maxlength="@Producto.NombreLongitudMaxima" autocomplete="off"
+               aria-describedby="ayuda-nombre-producto" />
+        <div id="ayuda-nombre-producto" class="form-text">Se guarda en mayúsculas. Máximo @Producto.NombreLongitudMaxima caracteres.</div>
+        <span asp-validation-for="Nombre"></span>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Tipo" class="form-label"></label>
+            <select asp-for="Tipo" asp-items="EtiquetasProducto.OpcionesTipo()" class="form-select">
+                <option value="">Seleccione...</option>
+            </select>
+            <span asp-validation-for="Tipo"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Unidad" class="form-label"></label>
+            <select asp-for="Unidad" asp-items="EtiquetasProducto.OpcionesUnidad()" class="form-select">
+                <option value="">Seleccione...</option>
+            </select>
+            <span asp-validation-for="Unidad"></span>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset class="sv-grupo">
+    <legend class="sv-grupo-titulo">Inventario</legend>
+
+    <div class="row">
+        <div class="col-md-6">
+            <label asp-for="StockMinimo" class="form-label"></label>
+            <input asp-for="StockMinimo" asp-format="{0:0.00}" type="text" inputmode="decimal" class="form-control"
+                   aria-describedby="ayuda-stock-minimo" />
+            <div id="ayuda-stock-minimo" class="form-text">Use coma para los decimales, sin separador de miles. Ejemplo: 7,50.</div>
+            <span asp-validation-for="StockMinimo"></span>
+        </div>
+    </div>
+</fieldset>
